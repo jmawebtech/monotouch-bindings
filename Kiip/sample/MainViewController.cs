@@ -67,24 +67,74 @@ namespace sample
 
 		partial void saveLeaderboard ()
 		{
-			throw new System.NotImplementedException ();
+			KPManager.SharedManager.UpdateScore(100, leaderboard_id.Text);
 		}
 		partial void setLocation ()
 		{
-			throw new System.NotImplementedException ();
+			KPManager.SharedManager.UpdateLocation((double)37.7753, (double)-122.4189);
 		}
 		partial void showFullscreen ()
 		{
-			throw new System.NotImplementedException ();
+			Console.WriteLine("Show Notification");
+			AppDelegate appDelegate = (AppDelegate)UIApplication.SharedApplication.Delegate;
+			NSMutableArray queue = appDelegate.Resources;
+			UInt16 count = Convert.ToUInt16(queue.Count - 1);
+			while(queue.Count > 0)
+			{
+
+				NSMutableDictionary reward = new NSMutableDictionary(new NSDictionary(queue.ValueAt(count)));
+				reward.SetValueForKey(NSNumber.FromInt32((int)KPViewPosition.FullScreen),new NSString("position"));
+				KPManager.SharedManager.PresentReward(reward);
+				queue.RemoveObject((int)queue.Count - 1);
+			}
+
+//			NSLog(@"show fullscreen");
+//    MainAppDelegate *appDelegate = (MainAppDelegate *)[[UIApplication sharedApplication] delegate];
+//
+//    NSMutableArray *queue = [appDelegate resources];
+//    while ([queue count] > 0) {
+//        NSMutableDictionary* reward = [NSMutableDictionary dictionaryWithDictionary:[queue objectAtIndex:[queue count] - 1]];
+//        [reward setObject:[NSNumber numberWithInt:kKPViewPosition_FullScreen] forKey:@"position"];
+//
+//        [[KPManager sharedManager] presentReward:reward];
+//        [queue removeObjectAtIndex:[queue count] - 1];
+   // }
 		}
 		partial void showNotification ()
 		{
-			throw new System.NotImplementedException ();
+			Console.WriteLine("Show Notification");
+			AppDelegate appDelegate = (AppDelegate)UIApplication.SharedApplication.Delegate;
+			NSMutableArray queue = appDelegate.Resources;
+			UInt16 count = Convert.ToUInt16(queue.Count - 1);
+			while(queue.Count > 0)
+			{
+
+				NSMutableDictionary reward = new NSMutableDictionary(new NSDictionary(queue.ValueAt(count)));
+				reward.SetValueForKey(NSNumber.FromInt32((int)KPViewPosition.FullScreen),new NSString("position"));
+				KPManager.SharedManager.PresentReward(reward);
+				queue.RemoveObject((int)queue.Count - 1);
+			}
+
+//			 NSLog(@"show notification");
+//    MainAppDelegate *appDelegate = (MainAppDelegate *)[[UIApplication sharedApplication] delegate];
+//
+//    kpViewPosition = (kpViewPosition == kKPViewPosition_Top) ? kKPViewPosition_Bottom : kKPViewPosition_Top;
+//    NSMutableArray *queue = [appDelegate resources];
+//    NSLog(@"queue length: %d", [queue count]);
+//    while ([queue count] > 0) {
+//        NSMutableDictionary* reward = [NSMutableDictionary dictionaryWithDictionary:[queue objectAtIndex:[queue count] - 1]];
+//        [reward setObject:[NSNumber numberWithInt:kpViewPosition] forKey:@"position"];
+//
+//        [[KPManager sharedManager] presentReward:reward];
+//        [queue removeObjectAtIndex:[queue count] - 1];
+//    }
+
+
 		}
 
 		partial void unlockAchievement ()
 		{
-			throw new System.NotImplementedException ();
+			KPManager.SharedManager.UnlockAchievement(achievement_id.Text);
 		}
 		partial void getActivePromos ()
 		{

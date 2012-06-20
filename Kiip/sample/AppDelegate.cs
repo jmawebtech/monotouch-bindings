@@ -31,6 +31,13 @@ namespace sample
 		// class-level declarations
 		UIWindow window;
 		MainViewController viewController;
+		NSMutableArray resources;
+
+		public NSMutableArray Resources {
+			get{ return resources;}
+			set{ resources = value;}
+		}
+
 		//
 		// This method is invoked when the application has loaded and is ready to run. In this 
 		// method you should instantiate the window, load the UI into it and then make the window
@@ -41,11 +48,13 @@ namespace sample
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
 			window = new UIWindow (UIScreen.MainScreen.Bounds);
-			var Manager = new KPManager("APIKEY","SECRET");
+			var Manager = new KPManager ("APIKEY", "SECRET");
 			KPManager.SharedManager = Manager;
 			KPManager.SharedManager.DidStartSession += DidStartSession;
+			KPManager.SharedManager.DidGetActivePromos += DidGetActivePromos;
 			//Manager.Delegate = new myDelegate();
-			KPManager.SharedManager.StartSession();
+			KPManager.SharedManager.StartSession ();
+			KPManager.SharedManager.GetActivePromos();
 			viewController = new MainViewController ();
 			window.RootViewController = viewController;
 			window.MakeKeyAndVisible ();
@@ -98,23 +107,23 @@ namespace sample
 			public void DidStartSession (KPManager manager, NSDictionary resource)
 			{
 				
-				Console.WriteLine("Session started");
-				if(resource == null)
-				{
-					var alert = new UIAlertView("Kiip","Session created: No Promo",null,"OK");
-					alert.Show();
+				Console.WriteLine ("Session started");
+				if (resource == null) {
+					var alert = new UIAlertView ("Kiip", "Session created: No Promo", null, "OK");
+					alert.Show ();
 					return;
 				}
 	
-				NSMutableDictionary reward = new NSMutableDictionary(resource);
-				reward.SetValueForKey(NSNumber.FromInt32((int)KPViewPosition.FullScreen),new NSString("position"));
-				KPManager.SharedManager.PresentReward(reward);
-				(new UIAlertView("Kiip","Session created: Promo",null,"Ok")).Show();;
+				NSMutableDictionary reward = new NSMutableDictionary (resource);
+				reward.SetValueForKey (NSNumber.FromInt32 ((int)KPViewPosition.FullScreen), new NSString ("position"));
+				KPManager.SharedManager.PresentReward (reward);
+				(new UIAlertView ("Kiip", "Session created: Promo", null, "Ok")).Show ();
+				;
 			}
 
 			public void DidEndSession (KPManager manager)
 			{
-				Console.WriteLine("DidEndSession");
+				Console.WriteLine ("DidEndSession");
 				// TODO: Implement - see: http://go-mono.com/docs/index.aspx?link=T%3aMonoTouch.Foundation.ModelAttribute
 			}
 
@@ -125,7 +134,7 @@ namespace sample
 
 			public void DidGetActivePromos (KPManager manager, NSArray promos)
 			{
-				Console.WriteLine("DidEndSession");
+				Console.WriteLine ("DidEndSession");
 				// TODO: Implement - see: http://go-mono.com/docs/index.aspx?link=T%3aMonoTouch.Foundation.ModelAttribute
 			}
 
@@ -141,38 +150,43 @@ namespace sample
 
 			public void DidReceiveError (KPManager manager, NSError error)
 			{
-				Console.WriteLine("DidEndSession");
+				Console.WriteLine ("DidEndSession");
 				// TODO: Implement - see: http://go-mono.com/docs/index.aspx?link=T%3aMonoTouch.Foundation.ModelAttribute
 			}
 
 			public void DidStartSwarm (string leaderboard_id)
 			{
-				Console.WriteLine("DidEndSession");
+				Console.WriteLine ("DidEndSession");
 				// TODO: Implement - see: http://go-mono.com/docs/index.aspx?link=T%3aMonoTouch.Foundation.ModelAttribute
 			}
 
 			public void DidReceiveContent (string content, int quantity, NSDictionary receipt)
 			{
-				Console.WriteLine("DidEndSession");
+				Console.WriteLine ("DidEndSession");
 				// TODO: Implement - see: http://go-mono.com/docs/index.aspx?link=T%3aMonoTouch.Foundation.ModelAttribute
 			}
 			#endregion
 		}
 
-		void DidStartSession(object sender, KiipManagerDictEventArgs evt)
+		void DidGetActivePromos(object sender, KiipManagerArrayEventArgs evt)
 		{
-			Console.WriteLine("Session started");
-			if(evt.Resource == null)
-			{
-				var alert = new UIAlertView("Kiip","Session created: No Promo",null,"OK");
-				alert.Show();
+			Console.WriteLine("Get active promos event fired.");
+		}
+
+		void DidStartSession (object sender, KiipManagerDictEventArgs evt)
+		{
+			Console.WriteLine ("Session started");
+			if (evt.Resource == null) {
+				var alert = new UIAlertView ("Kiip", "Session created: No Promo", null, "OK");
+				alert.Show ();
 				return;
 			}
 
-			NSMutableDictionary reward = new NSMutableDictionary(evt.Resource);
-			reward.SetValueForKey(NSNumber.FromInt32((int)KPViewPosition.FullScreen),new NSString("position"));
-			KPManager.SharedManager.PresentReward(reward);
-			(new UIAlertView("Kiip","Session created: Promo",null,"Ok")).Show();;
+			NSMutableDictionary reward = new NSMutableDictionary (evt.Resource);
+			reward.SetValueForKey (NSNumber.FromInt32 ((int)KPViewPosition.FullScreen), new NSString ("position"));
+			KPManager.SharedManager.PresentReward (reward);
+			(new UIAlertView ("Kiip", "Session created: Promo", null, "Ok")).Show ();
+			;
 		}
 
 
